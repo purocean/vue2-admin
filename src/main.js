@@ -1,10 +1,26 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
+import VueRouter from 'vue-router'
+import VueResource from 'vue-resource'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+import App from './layouts/App.vue'
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  render: h => h(App)
+import router from './routers/App.js'
+
+Vue.use(VueRouter)
+Vue.use(VueResource)
+
+Vue.http.interceptors.push((request, next) => {
+  NProgress.start()
+
+  next((response) => {
+    NProgress.done()
+  })
 })
+
+let VueInstance = new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')
+
+export default VueInstance
