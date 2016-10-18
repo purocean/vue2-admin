@@ -1,4 +1,5 @@
 import Storage from '../utils/storage'
+import Urls from '../const/urls'
 
 let getAccessToken = function () {
   return Storage.get('auth_access_token')
@@ -6,6 +7,10 @@ let getAccessToken = function () {
 
 let setAccessToken = function (token) {
   return Storage.set('auth_access_token', token)
+}
+
+let isLogin = function () {
+  return !!getAccessToken()
 }
 
 let getPermissions = function () {
@@ -29,21 +34,17 @@ let checkRole = function (role) {
   return roles.indexOf(role) > -1
 }
 
-let isLogin = function () {
-  return !!getAccessToken()
-}
-
-let checkRoute = function (route) {
+let checkPermission = function (permission) {
   let permissions = getPermissions()
-  if (permissions.indexOf(route) > -1) {
+  if (permissions.indexOf(permission) > -1) {
     return true
   }
 
-  let pos = 1
-  while (pos > 0) {
-    pos = route.lastIndexOf('/')
-    route = route.substring(0, pos)
-    if (permissions.indexOf(route + '/*') > -1) {
+  let pos = permission.lastIndexOf('/')
+  while (pos > -1) {
+    pos = permission.lastIndexOf('/')
+    permission = permission.substring(0, pos)
+    if (permissions.indexOf(permission + '/*') > -1) {
       return true
     }
   }
@@ -51,8 +52,29 @@ let checkRoute = function (route) {
   return false
 }
 
-let check = function (item) {
-  return checkRoute(item) || checkRole(item)
+/**
+ * Check from server if callback provided.
+ */
+let can = function (item, callback) {
+  if (callback) {
+    window.fetch(Urls.userItems, {headers: {Authorization: 'Bearer ' + getAccessToken()}})
+    .then(response => {
+      if (response.ok) {
+        response.json().then(data => {
+          setRoles(Object.keys(data.roles))
+          setPermissions(Object.keys(data.permissions))
+          callback(checkRole(item) || checkPermission(item))
+        })
+      } else {
+        console.log('Network response was not ok.')
+      }
+    })
+    .catch(error => {
+      console.log('There has been a problem with your fetch operation: ' + error.message)
+    })
+  } else {
+    return checkRole(item) || checkPermission(item)
+  }
 }
 
 export default {
@@ -62,8 +84,8 @@ export default {
   setPermissions,
   getRoles,
   setRoles,
-  checkRoute,
+  checkPermission,
   checkRole,
   isLogin,
-  check
+  can
 }

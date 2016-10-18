@@ -1,11 +1,11 @@
 const perfix = 'vue2-admin'
 
 let get = function (key, defaultValue) {
-  return typeof window.localStorage[perfix + key] === 'undefined' ? defaultValue : window.localStorage[perfix + key]
+  return typeof window.localStorage[perfix + key] === 'undefined' ? defaultValue : JSON.parse(window.localStorage[perfix + key])
 }
 
 let set = function (key, value) {
-  window.localStorage[perfix + key] = value
+  window.localStorage[perfix + key] = JSON.stringify(value)
 }
 
 export default {

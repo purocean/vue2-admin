@@ -30,14 +30,16 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  if (Auth.check(to.path)) {
-    next()
+  if (Auth.isLogin()) {
+    Auth.can(to.path, allow => {
+      if (allow) {
+        next()
+      } else {
+        next({name: '403'})
+      }
+    })
   } else {
-    if (Auth.isLogin()) {
-      next({name: '403'})
-    } else {
-      next({name: 'login'})
-    }
+    next({name: 'login'})
   }
 })
 

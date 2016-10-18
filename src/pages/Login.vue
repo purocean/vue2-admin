@@ -53,7 +53,7 @@ export default {
       e.preventDefault()
 
       this.$http.post(
-        Urls.login,
+        Urls.userLogin,
         {
           username: this.username,
           password: this.password,
