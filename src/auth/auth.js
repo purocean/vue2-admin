@@ -29,6 +29,10 @@ let checkRole = function (role) {
   return roles.indexOf(role) > -1
 }
 
+let isLogin = function () {
+  return !!getAccessToken()
+}
+
 let checkRoute = function (route) {
   let permissions = getPermissions()
   if (permissions.indexOf(route) > -1) {
@@ -60,5 +64,6 @@ export default {
   setRoles,
   checkRoute,
   checkRole,
+  isLogin,
   check
 }

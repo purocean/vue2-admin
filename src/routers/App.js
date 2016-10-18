@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
   if (Auth.check(to.path)) {
     next()
   } else {
-    if (Auth.isLogin) {
+    if (Auth.isLogin()) {
       next({name: '403'})
     } else {
       next({name: 'login'})

@@ -23,3 +23,18 @@ export default {
 <style>
   @import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 </style>
+
+<style>
+  #nprogress .spinner-icon {
+    border-top-color: #fff;
+    border-left-color: #fff;
+  }
+
+  #nprogress .bar {
+    background: #fff;
+  }
+
+  #nprogress .peg {
+    box-shadow: 0 0 10px #fff, 0 0 5px #fff;
+  }
+</style>
