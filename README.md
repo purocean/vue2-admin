@@ -1,5 +1,5 @@
 # vue2-admin
-
+# 此项目已废弃，请参看这个项目： https://github.com/purocean/laravel-template
 > A RESTful RBAC auth manager
 
 ## Build Setup
